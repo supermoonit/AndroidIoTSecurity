@@ -12,10 +12,14 @@ import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
 import android.widget.ImageButton;
 
 public class ledActivity extends MainActivity {
@@ -43,8 +47,15 @@ public class ledActivity extends MainActivity {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Toast.makeText(ledActivity.this, "connected!", Toast.LENGTH_SHORT).show();
-                }
+                    int mqttQos = 1;
+                    String topic = "iot/led1";
 
+                    try {
+                        client.subscribe(topic, mqttQos);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
+                }
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                     Toast.makeText(ledActivity.this, "fail!", Toast.LENGTH_SHORT).show();
@@ -53,7 +64,6 @@ public class ledActivity extends MainActivity {
         } catch (MqttException e) {
             e.printStackTrace();
         }
-
     }
 
 
