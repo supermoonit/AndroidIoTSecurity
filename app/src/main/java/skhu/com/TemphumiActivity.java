@@ -32,8 +32,8 @@ import com.akaita.android.circularseekbar.CircularSeekBar;
 import java.text.DecimalFormat;
 
 public class TemphumiActivity extends MainActivity {
-    String topicstr = "iot/temp_humi";
-
+    String topicstr1 = "iot/temp";
+    String topicstr2 = "iot/humi";
     //================================================================
     TextView Temp_view;
     TextView Humi_view;
@@ -42,13 +42,12 @@ public class TemphumiActivity extends MainActivity {
     private Object v;
 
     //================================================================
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temphumi);
 
-        int mqttQos = 1;
+        topicstr = "iot/temp_humi";
         //============Temp , Humi settng==============================================
 
         Temp_view = findViewById(R.id.present_temp_state);
@@ -56,6 +55,13 @@ public class TemphumiActivity extends MainActivity {
 
         Humi_view = findViewById(R.id.present_humi_state);
         Humi_view.setText("현재습도 : ");
+
+
+//        float present_Temp = 0;
+//        float past_temp=present_Temp;
+//
+//        float present_Humi = 0;
+//        float past_Humi=present_Humi;
 
         //=====================================================================
         String clientId = MqttClient.generateClientId();
@@ -80,6 +86,12 @@ public class TemphumiActivity extends MainActivity {
             token.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
+                    try {
+                        client.subscribe(topicstr1, 0);
+                        client.subscribe(topicstr2, 0);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
                 }
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
@@ -109,7 +121,6 @@ public class TemphumiActivity extends MainActivity {
                 message = num1.toString();
                 Log.d(topic, message);
 
-
                 try {
                     client.publish(topic, message.getBytes(), 0, false);
                 } catch (MqttException e) {
@@ -130,7 +141,7 @@ public class TemphumiActivity extends MainActivity {
 
             @Override
             public void onStopTrackingTouch(CircularSeekBar seekBar) {
-                String topic = "iot/temp_humi";
+                String topic = topicstr;
                 Long num2 = (long) Humi_num;
                 String message = num2.toString();
                 Log.d(topic, message);
@@ -142,6 +153,32 @@ public class TemphumiActivity extends MainActivity {
             }
         });
 
+        client.setCallback(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable cause) {
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                String msg1="", msg2="";
+                Temp_view = findViewById(R.id.present_temp_state);
+                Humi_view = findViewById(R.id.present_humi_state);
+
+                    if(topic.equals(topicstr1)){
+                        msg1 = new String(message.getPayload());
+                        Temp_view.setText("현재온도 : " + msg1);
+                    }
+                    else if(topic.equals(topicstr2)){
+                        msg2 = new String(message.getPayload());
+                        Humi_view.setText("현재습도 : " + msg2);
+
+                }
+            }
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
+        });
     }
 }
 

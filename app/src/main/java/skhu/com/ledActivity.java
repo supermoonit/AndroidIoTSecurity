@@ -25,12 +25,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import android.widget.ImageButton;
 
 public class ledActivity extends MainActivity{
-    public static String MQTTHOST = "tcp://192.168.0.4:1883";
-    static String USERNAME = "root";
-    static String PASSWORD = "1234";
-    String topicstr = "iot/led1";
-    MqttAndroidClient client;
-//
+
     public String flag = "off";
 //    ImageButton btn_change;
     TextView led1_view;
