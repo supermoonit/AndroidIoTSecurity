@@ -32,13 +32,7 @@ import com.akaita.android.circularseekbar.CircularSeekBar;
 import java.text.DecimalFormat;
 
 public class TemphumiActivity extends MainActivity {
-
-    public static String MQTTHOST = "tcp://192.168.0.4:1883";
-    static String USERNAME = "root";
-    static String PASSWORD = "1234";
     String topicstr = "iot/temp_humi";
-    MqttAndroidClient client;
-    //MqttMessage message;
 
     //================================================================
     TextView Temp_view;
