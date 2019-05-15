@@ -19,12 +19,13 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 
-public class    MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     public static String MQTTHOST = "tcp://192.168.0.2:1883";
     static String USERNAME = "root";
     static String PASSWORD = "1234";
     String topicstr = "iot/led1";
     MqttAndroidClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

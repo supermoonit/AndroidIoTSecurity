@@ -70,9 +70,16 @@
             android:id="@+id/led_living_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_brightness_high_black_48dp"
             android:layout_gravity="center"
-            android:onClick="pub_led1"/>
+            android:background="@android:color/transparent"
+            android:onClick="pub_led1"
+            android:src="@mipmap/ic_brightness_high_black_48dp" />
+
+        <TextView
+            android:id="@+id/led1_view"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="TextView" />
 
         <TextView
             android:id="@+id/led_bath"
@@ -93,6 +100,11 @@
             android:src="@mipmap/ic_brightness_high_black_48dp" />
 
         <TextView
+            android:id="@+id/led2_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+
+        <TextView
             android:id="@+id/led_bed"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
@@ -105,8 +117,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:onClick="pub_led1"
+            android:onClick="pub_led3"
             android:src="@mipmap/ic_brightness_high_black_48dp" />
+
+        <TextView
+            android:id="@+id/led3_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <!--android:layout_weight="1"-->
 
