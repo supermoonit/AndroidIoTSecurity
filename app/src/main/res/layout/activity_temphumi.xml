@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TemphumiActivity">
+
+    <TextView
+        android:gravity="center"
+        android:textSize="16sp"
+        android:layout_width="164dp"
+        android:layout_height="80dp"
+        android:id="@+id/present_temp_state" app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
+
+        android:layout_marginStart="8dp"
+        app:layout_constraintHorizontal_bias="0.09" android:layout_marginTop="60dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:gravity="center"
+        android:textSize="16sp"
+        android:layout_width="164dp"
+        android:layout_height="80dp"
+        android:id="@+id/present_humi_state" app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
+
+        android:layout_marginStart="8dp"
+        app:layout_constraintHorizontal_bias="0.917" android:layout_marginTop="60dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.akaita.android.circularseekbar.CircularSeekBar
+        android:id="@+id/Seek_bar1"
+        app:enabled="true"
+        app:innerCircleColor="#F8FCFC"
+        app:min="10"
+        app:max="40"
+        app:progress="10"
+        app:progressTextSize="30"
+        app:progressTextColor="#111111"
+        app:ringColor="#646464"
+        app:ringWidth="0.5"
+        app:showIndicator="true"
+        app:showInnerCircle="true"
+        app:showProgressText="true"
+        app:speedMultiplier="4"
+        android:foregroundGravity="center"
+        android:layout_width="163dp"
+        android:layout_height="114dp" tools:ignore="MissingConstraints"
+        app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/present_temp_state" app:layout_constraintVertical_bias="0.494"
+        android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginRight="8dp"
+        app:layout_constraintHorizontal_bias="0.129"/>
+
+    <com.akaita.android.circularseekbar.CircularSeekBar
+        android:id="@+id/Seek_bar2"
+        app:enabled="true"
+        app:innerCircleColor="#F8FCFC"
+        app:min="0"
+        app:max="60"
+        app:progress="10"
+        app:progressTextSize="30"
+        app:progressTextColor="#111111"
+        app:ringColor="#646464"
+        app:ringWidth="0.5"
+        app:showIndicator="true"
+        app:showInnerCircle="true"
+        app:showProgressText="true"
+        app:speedMultiplier="6"
+        android:foregroundGravity="center"
+        android:layout_width="163dp"
+        android:layout_height="114dp" tools:ignore="MissingConstraints"
+        app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/present_temp_state" app:layout_constraintVertical_bias="0.494"
+        android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginRight="8dp"
+        app:layout_constraintHorizontal_bias="0.918"/>
+</android.support.constraint.ConstraintLayout>
