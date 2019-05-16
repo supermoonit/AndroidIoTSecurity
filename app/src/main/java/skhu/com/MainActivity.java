@@ -93,4 +93,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent3 = new Intent(MainActivity.this, TemphumiActivity.class);
         startActivity(intent3);
     }
+
+    public void DoorActivity(View view) {
+        Intent intent4 = new Intent(MainActivity.this, DoorActivity.class);
+        startActivity(intent4);
+    }
 }
