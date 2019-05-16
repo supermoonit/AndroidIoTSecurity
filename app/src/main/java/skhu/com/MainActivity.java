@@ -1,15 +1,13 @@
 package skhu.com;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -23,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
     public static String MQTTHOST = "tcp://192.168.0.2:1883";
     static String USERNAME = "root";
     static String PASSWORD = "1234";
-    String topicstr = "iot/led1";
     MqttAndroidClient client;
 
     @Override
@@ -55,15 +52,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    public void pub(View v){
-        String topic = topicstr;
-        String message = "ON";
-        try {
-            client.publish(topic, message.getBytes(), 0, false);
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
-    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
