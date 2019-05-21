@@ -21,7 +21,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 
 
 public class MainActivity extends AppCompatActivity {
-    public static String MQTTHOST = "tcp://192.168.0.2:1883";
+    public static String MQTTHOST = "tcp://192.168.0.4:1883";
     static String USERNAME = "root";
     static String PASSWORD = "1234";
     String topicstr = "iot/";

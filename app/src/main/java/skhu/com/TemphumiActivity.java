@@ -56,13 +56,6 @@ public class TemphumiActivity extends MainActivity {
         Humi_view = findViewById(R.id.present_humi_state);
         Humi_view.setText("현재습도 : ");
 
-
-//        float present_Temp = 0;
-//        float past_temp=present_Temp;
-//
-//        float present_Humi = 0;
-//        float past_Humi=present_Humi;
-
         //=====================================================================
         String clientId = MqttClient.generateClientId();
         client = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST, clientId);
