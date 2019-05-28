@@ -21,11 +21,14 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 
 
 public class MainActivity extends AppCompatActivity {
-    public static String MQTTHOST = "tcp://192.168.0.4:1883";
-    static String USERNAME = "root";
-    static String PASSWORD = "1234";
-    String topicstr = "iot/";
-    MqttAndroidClient client;
+    public static String MQTTHOST_iot = "tcp://192.168.0.2:1883";
+    public static String MQTTHOST_server = "tcp://192.168.0.14:1883";
+    static String USERNAME = "teamE";
+    static String PASSWORD = "1q2w3e4r!";
+    String topicstr_iot = "iot/";
+    String topicstr_server = "server/";
+    MqttAndroidClient client_iot;
+    MqttAndroidClient client_server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,34 +36,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         String clientId = MqttClient.generateClientId();
-        client = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST, clientId);
+        client_iot = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST_iot, clientId);
+        client_server = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST_server, clientId);
 
         MqttConnectOptions options = new MqttConnectOptions();
         options.setUserName(USERNAME);
         options.setPassword(PASSWORD.toCharArray());
 
         try {
-            IMqttToken token = client.connect(options);
-            token.setActionCallback(new IMqttActionListener() {
+            IMqttToken token_iot = client_iot.connect(options);
+            IMqttToken token_server = client_server.connect(options);
+            token_iot.setActionCallback(new IMqttActionListener() {
                     @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Toast.makeText(MainActivity.this, "connected!", Toast.LENGTH_SHORT).show();
+
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Toast.makeText(MainActivity.this, "fail!", Toast.LENGTH_SHORT).show();
                 }
             });
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
-    }
-    public void pub(View v){
-        String topic = topicstr;
-        String message = "ON";
-        try {
-            client.publish(topic, message.getBytes(), 0, false);
         } catch (MqttException e) {
             e.printStackTrace();
         }

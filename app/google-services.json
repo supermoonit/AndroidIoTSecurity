@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "707245294599",
+    "firebase_url": "https://androidiotsecurity.firebaseio.com",
+    "project_id": "androidiotsecurity",
+    "storage_bucket": "androidiotsecurity.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707245294599:android:9406fa772320e9a7",
+        "android_client_info": {
+          "package_name": "skhu.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "707245294599-k3qk1m0qlcq2haqjjhsjejdefhe2knct.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFy9Y2UScke8o4dI0ImwClKI6fdRe-HJo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "707245294599-k3qk1m0qlcq2haqjjhsjejdefhe2knct.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
