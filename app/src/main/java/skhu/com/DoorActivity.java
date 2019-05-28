@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,18 +30,27 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public class DoorActivity extends MainActivity {
     String topicstr_iot = "iot/motor1";
     String topicstr_server = "app/motor1";
+
     ImageButton img_btn;
     int flag = 1;
 
     TextView text;
-
+    WebView  web;
+    String url = "http://192.168.0.2:8080/stream";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_door);
-        img_btn = (ImageButton) findViewById(R.id.imageButton);
 
+        img_btn = (ImageButton) findViewById(R.id.imageButton);
         text = (TextView) findViewById(R.id.textView);
+
+        web = (WebView)findViewById(R.id.webView);
+        web.setWebViewClient(new WebViewClient());
+
+        WebSettings webSettings = web.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        web.loadUrl(url);
         //=====================================================================
         String clientId = MqttClient.generateClientId();
         client_iot = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST_iot, clientId);
