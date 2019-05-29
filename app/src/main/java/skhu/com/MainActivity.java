@@ -1,5 +1,6 @@
 package skhu.com;
 
+import android.media.session.MediaSession;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -22,6 +23,16 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import android.os.Bundle;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class MainActivity extends AppCompatActivity {
     public static String MQTTHOST_iot = "tcp://192.168.0.2:1883";
@@ -39,8 +50,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //추가한 라인
-        FirebaseMessaging.getInstance().subscribeToTopic("news");
-        FirebaseInstanceId.getInstance().getToken();
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d("도착결과는",token);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("Token", token)
+                .build();
+
+        //request
+        Request request = new Request.Builder()
+                .url("http://192.168.0.14/fcm/register.php")
+                .post(body)
+                .build();
 
         String clientId = MqttClient.generateClientId();
         client_iot = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST_iot, clientId);
@@ -51,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         options.setPassword(PASSWORD.toCharArray());
 
         try {
+            client.newCall(request).execute();
             IMqttToken token_iot = client_iot.connect(options);
             IMqttToken token_server = client_server.connect(options);
             token_iot.setActionCallback(new IMqttActionListener() {
@@ -64,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }

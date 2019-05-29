@@ -11,14 +11,23 @@ import android.os.Build;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
-
-
 
     @Override
 
@@ -27,21 +36,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
 
-
         if (remoteMessage.getData().size() > 0) {
 
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-
-
             if (true) {
-
             } else {
-
                 handleNow();
-
             }
-
         }
 
         if (remoteMessage.getNotification() != null) {
@@ -77,14 +79,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String channelId = getString(R.string.default_notification_channel_id);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
         NotificationCompat.Builder notificationBuilder =
 
                 new NotificationCompat.Builder(this, channelId)
 
                         .setSmallIcon(R.mipmap.ic_launcher)
 
-                        .setContentTitle("FCM Message")
+                        .setContentTitle("화재알람입니다.")
 
                         .setContentText(messageBody)
 
