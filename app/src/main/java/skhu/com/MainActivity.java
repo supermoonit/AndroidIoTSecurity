@@ -20,15 +20,6 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-
-
-import java.io.IOException;
-
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 public class MainActivity extends AppCompatActivity {
     public static String MQTTHOST_iot = "tcp://192.168.0.2:1883";
