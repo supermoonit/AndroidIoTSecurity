@@ -1,14 +1,12 @@
 package skhu.com;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-import android.view.View;
-
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -17,14 +15,13 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-
 public class MainActivity extends AppCompatActivity {
     public static String MQTTHOST_iot = "tcp://192.168.0.2:1883";
     public static String MQTTHOST_server = "tcp://192.168.0.14:1883";
     static String USERNAME = "teamE";
     static String PASSWORD = "1q2w3e4r!";
     String topicstr_iot = "iot/";
-    String topicstr_server = "server/";
+    String topicstr_server = "app/";
     MqttAndroidClient client_iot;
     MqttAndroidClient client_server;
 
@@ -45,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
             IMqttToken token_iot = client_iot.connect(options);
             IMqttToken token_server = client_server.connect(options);
             token_iot.setActionCallback(new IMqttActionListener() {
-                    @Override
+                @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
+
                 }
 
                 @Override
@@ -90,5 +88,10 @@ public class MainActivity extends AppCompatActivity {
     public void DoorActivity(View view) {
         Intent intent4 = new Intent(MainActivity.this, DoorActivity.class);
         startActivity(intent4);
+    }
+
+    public void CameraActivity(View view) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://192.168.0.12:625/videostream.cgi?user=admin&pwd=123456789"));
+        startActivity(intent);
     }
 }
