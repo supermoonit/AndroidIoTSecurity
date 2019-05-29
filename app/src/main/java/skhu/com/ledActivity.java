@@ -2,6 +2,7 @@ package skhu.com;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,29 +18,34 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 //import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 
-public class ledActivity extends MainActivity{
+public class ledActivity extends MainActivity {
     public static String MQTTHOST = "tcp://192.168.0.2:1883";
     static String USERNAME = "root";
     static String PASSWORD = "1234";
-    String topicstr = "iot/led1";
     MqttAndroidClient client;
-    //
-    public String flag1 = "off";
-    public String flag2 = "off";
-    public String flag3 = "off";
+    int flag1_img = 1;
+    int flag2_img = 1;
+    String flag1 = "off";
+    String flag2 = "off";
+    ImageButton img_btn1;
+    ImageButton img_btn2;
 
-    //    ImageButton btn_change;
-//
+    TextView led1_text, led2_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_led);
-//        btn_change = (ImageButton) findViewById(R.id.led_living_btn);
-//        btn_change.setOnClickListener(this);
+
+        img_btn1 = (ImageButton) findViewById(R.id.led_living_btn);
+        img_btn2 = (ImageButton) findViewById(R.id.led_kit_btn);
+
+        led1_text = (TextView) findViewById(R.id.led1_view);
+        led2_text = (TextView) findViewById(R.id.led2_view);
 
         String clientId = MqttClient.generateClientId();
         client = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST, clientId);
+        client_server = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST_server, clientId);
 
         MqttConnectOptions options = new MqttConnectOptions();
         options.setUserName(USERNAME);
@@ -47,6 +53,7 @@ public class ledActivity extends MainActivity{
 
         try {
             IMqttToken token = client.connect(options);
+            IMqttToken token_server = client_server.connect(options);
             token.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
@@ -54,11 +61,11 @@ public class ledActivity extends MainActivity{
                     try {
                         client.subscribe("iot/led1", 0);
                         client.subscribe("iot/led2", 0);
-                        client.subscribe("iot/led3", 0);
                     } catch (MqttException e) {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                     Toast.makeText(ledActivity.this, "fail!", Toast.LENGTH_SHORT).show();
@@ -73,26 +80,39 @@ public class ledActivity extends MainActivity{
             @Override
             public void connectionLost(Throwable cause) {
             }
+
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                //모든 메시지가 올때 Callback method
-                if (topic.equals("iot/led1")){     //topic 별로 분기처리하여 작업을 수행할수도있음
-                    String msg1 = new String(message.getPayload());
-                    TextView led1_view =(TextView)findViewById(R.id.led1_view);
-                    led1_view.setText("led1 현재상태 : " + msg1);
-                }
-                if(topic.equals("iot/led2")) {
-                    String msg2 = new String(message.getPayload());
-                    TextView led2_view = (TextView) findViewById(R.id.led2_view);
-                    led2_view.setText("led2 현재상태 : " + msg2);
-                }
-                if(topic.equals("iot/led3")){
-                    String msg3 = new String(message.getPayload());
-                    TextView led3_view =(TextView)findViewById(R.id.led3_view);
-                    led3_view.setText("led3 현재상태 : " + msg3);
+                if(topic.equals("iot/led1")){
+                    String msg1 = "";
+                    msg1 = new String(message.getPayload());
+                    if (msg1=="ON") {
+                        img_btn1.setSelected(true);
+                        led1_text.setText("거실 상태 : " + msg1);
+                        msg1 = "";
+                    }
+                    else if(msg1=="OFF"){
+                        img_btn1.setSelected(false);
+                        led1_text.setText("거실 상태 : " + msg1);
+                        msg1 = "";
                     }
                 }
 
+                if(topic.equals("iot/led2")){
+                    String msg2 = "";
+                    msg2 = new String(message.getPayload());
+                    if (msg2=="ON") {
+                        img_btn1.setSelected(true);
+                        led1_text.setText("거실 상태 : " + msg2);
+                        msg2 = "";
+                    }
+                    else if(msg2=="OFF"){
+                        img_btn1.setSelected(false);
+                        led1_text.setText("거실 상태 : " + msg2);
+                        msg2 = "";
+                    }
+                }
+            }
 
             @Override
 
@@ -105,20 +125,24 @@ public class ledActivity extends MainActivity{
 
 
     public void pub_led1(View v) {
-        String topic = topicstr;
+        String topic = "iot/led1";
+        String topic_server = "app/led1";
         String message = "";
 
         if (flag1 == "off") {
             flag1 = "on";
             message = "ON";
+            img_btn1.setSelected(true);
 //            btn_change.setSelected(true);
         } else if (flag1 == "on") {
             flag1 = "off";
             message = "OFF";
+            img_btn1.setSelected(false);
 //            btn_change.setSelected(false);
         }
         try {
             client.publish(topic, message.getBytes(), 0, false);
+            client_server.publish(topic_server, message.getBytes(), 0, false);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -126,38 +150,22 @@ public class ledActivity extends MainActivity{
 
     public void pub_led2(View v) {
         String topic = "iot/led2";
+        String topic_server = "app/led2";
         String message = "";
         if (flag2 == "off") {
             flag2 = "on";
-
             message = "ON";
+            img_btn2.setSelected(true);
         } else if (flag2 == "on") {
             flag2 = "off";
             message = "OFF";
+            img_btn2.setSelected(false);
         }
         try {
             client.publish(topic, message.getBytes(), 0, false);
+            client_server.publish(topic_server, message.getBytes(), 0, false);
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
-
-    public void pub_led3(View v) {
-        String topic = "iot/led3";
-        String message = "";
-        if (flag3 == "off") {
-            flag3 = "on";
-
-            message = "ON";
-        } else if (flag3 == "on") {
-            flag3 = "off";
-            message = "OFF";
-        }
-        try {
-            client.publish(topic, message.getBytes(), 0, false);
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
