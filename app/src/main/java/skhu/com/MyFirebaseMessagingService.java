@@ -13,18 +13,10 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
-
-import java.io.IOException;
-
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
@@ -56,6 +48,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
+
     private void handleNow() {
 
         Log.d(TAG, "Short lived task is done.");
@@ -83,7 +76,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 new NotificationCompat.Builder(this, channelId)
 
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.drawable.fire)
 
                         .setContentTitle("화재알람입니다.")
 

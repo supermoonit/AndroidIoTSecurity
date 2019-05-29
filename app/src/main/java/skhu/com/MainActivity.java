@@ -21,11 +21,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 
-import android.os.Bundle;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 
@@ -49,21 +45,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //추가한 라인
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.d("도착결과는",token);
-
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("Token", token)
-                .build();
-
-        //request
-        Request request = new Request.Builder()
-                .url("http://192.168.0.14/fcm/register.php")
-                .post(body)
-                .build();
-
         String clientId = MqttClient.generateClientId();
         client_iot = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST_iot, clientId);
         client_server = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST_server, clientId);
@@ -73,13 +54,11 @@ public class MainActivity extends AppCompatActivity {
         options.setPassword(PASSWORD.toCharArray());
 
         try {
-            client.newCall(request).execute();
             IMqttToken token_iot = client_iot.connect(options);
             IMqttToken token_server = client_server.connect(options);
             token_iot.setActionCallback(new IMqttActionListener() {
                     @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-
                 }
 
                 @Override
@@ -89,9 +68,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (MqttException e) {
             e.printStackTrace();
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
