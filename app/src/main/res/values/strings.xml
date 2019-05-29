@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">teamproject</string>
+    <string name="app_name">smart IoT HOME</string>
     <string name="action_camera">카메라</string>
     <string name ="default_notification_channel_id" translatable="false">"fcm_default_channel"</string>
 </resources>

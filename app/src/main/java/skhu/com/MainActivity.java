@@ -1,13 +1,10 @@
 package skhu.com;
 
-import android.media.session.MediaSession;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.view.Menu;
