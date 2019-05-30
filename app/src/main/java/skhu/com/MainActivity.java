@@ -3,10 +3,14 @@ package skhu.com;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -25,10 +29,14 @@ public class MainActivity extends AppCompatActivity {
     MqttAndroidClient client_iot;
     MqttAndroidClient client_server;
 
+    Switch switch1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        switch1 = findViewById(R.id.switch1);
 
         String clientId = MqttClient.generateClientId();
         client_iot = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST_iot, clientId);
@@ -44,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
             token_iot.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-
                 }
 
                 @Override
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -93,5 +101,40 @@ public class MainActivity extends AppCompatActivity {
     public void CameraActivity(View view) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://192.168.0.12:625/videostream.cgi?user=admin&pwd=123456789"));
         startActivity(intent);
+    }
+
+    public void onClick(View view) {
+        View door_layout;
+        door_layout = findViewById(R.id.door_layout);
+
+        if ((switch1.isChecked()) == true) {
+            final Snackbar snackbar = Snackbar.make(door_layout, "외출모드로 변환합니다.", Snackbar.LENGTH_INDEFINITE);
+
+            snackbar.setAction("확인", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    snackbar.dismiss();
+                    try {
+                        client_iot.publish("iot/outside", "ON".getBytes(), 0, false);
+                        client_server.publish("app/outside", "ON".getBytes(), 0, false);
+
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            snackbar.show();
+        }
+
+        if ((switch1.isChecked()) == false) {
+                try {
+                    client_iot.publish("iot/outside", "OFF".getBytes(), 0, false);
+                    client_server.publish("app/outside ", "OFF".getBytes(), 0, false);
+
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+
+        }
     }
 }

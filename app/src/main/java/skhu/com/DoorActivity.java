@@ -13,6 +13,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,29 +30,42 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 
 public class DoorActivity extends MainActivity {
+
+    //==============================================
     String topicstr_iot = "iot/motor1";
     String topicstr_server = "app/motor1";
+    //==============================================
 
+    //==============================================
     ImageButton img_btn;
     int flag = 1;
+    //==============================================
 
+    //==============================================
     TextView text;
-    WebView  web;
+    WebView web;
     String url = "http://192.168.0.2:8080/stream";
+    //==============================================
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_door);
 
+        //================================================================
         img_btn = (ImageButton) findViewById(R.id.imageButton);
         text = (TextView) findViewById(R.id.textView);
+        //================================================================
 
-        web = (WebView)findViewById(R.id.webView);
+        //================================================================
+        web = (WebView) findViewById(R.id.webView);
         web.setWebViewClient(new WebViewClient());
 
         WebSettings webSettings = web.getSettings();
         webSettings.setJavaScriptEnabled(true);
         web.loadUrl(url);
+        //================================================================
+
         //=====================================================================
         String clientId = MqttClient.generateClientId();
         client_iot = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST_iot, clientId);
@@ -76,6 +91,7 @@ public class DoorActivity extends MainActivity {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                 }
@@ -92,12 +108,13 @@ public class DoorActivity extends MainActivity {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                String msg1="", msg2="";
+                String msg1 = "", msg2 = "";
 
-                if(topic.equals("iot/motor1")){
+                if (topic.equals("iot/motor1")) {
                     msg1 = new String(message.getPayload());
                 }
             }
+
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
 
@@ -106,7 +123,6 @@ public class DoorActivity extends MainActivity {
     }
 
     public void onClick(View view) {
-
         if (flag == 1) {
             img_btn.setSelected(true);
             flag = 0;
@@ -132,6 +148,7 @@ public class DoorActivity extends MainActivity {
             String message = "CLOSE";
 
             text.setText("문이 닫힙니다.");
+
             try {
                 client_iot.publish(topic_iot, message.getBytes(), 0, false);
                 client_server.publish(topic_server, message.getBytes(), 0, false);

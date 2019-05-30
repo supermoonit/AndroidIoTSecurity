@@ -53,7 +53,6 @@ public class TemphumiActivity extends MainActivity {
 
         Humi_view = findViewById(R.id.present_humi_state);
         Humi_view.setText("현재습도 : ");
-
         //=====================================================================
         String clientId = MqttClient.generateClientId();
         client_iot = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST_iot, clientId);
@@ -116,7 +115,7 @@ public class TemphumiActivity extends MainActivity {
 
                 try {
                     client_iot.publish("iot/led3", message.getBytes(), 0, false);
-                    client_server.publish("server/led3", message.getBytes(), 0, false);
+                    client_server.publish("app/led3", message.getBytes(), 0, false);
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }
@@ -141,7 +140,7 @@ public class TemphumiActivity extends MainActivity {
 //                Log.d("iot/humi", message);
                 try {
                     client_iot.publish("iot/led4", message.getBytes(), 0, false);
-                    client_server.publish("server/led4", message.getBytes(), 0, false);
+                    client_server.publish("app/led4", message.getBytes(), 0, false);
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }

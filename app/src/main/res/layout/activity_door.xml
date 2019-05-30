@@ -8,11 +8,11 @@
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="72dp"
-        android:layout_height="74dp"
-        android:layout_marginStart="164dp"
-        android:layout_marginLeft="164dp"
-        android:layout_marginBottom="104dp"
+        android:layout_width="108dp"
+        android:layout_height="104dp"
+        android:layout_marginStart="152dp"
+        android:layout_marginLeft="152dp"
+        android:layout_marginBottom="112dp"
         android:background="@drawable/door_img_btn"
         android:onClick="onClick"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,6 +50,7 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/imageButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
