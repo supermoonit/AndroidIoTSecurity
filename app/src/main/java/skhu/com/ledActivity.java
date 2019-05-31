@@ -1,9 +1,9 @@
 package skhu.com;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -20,8 +20,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class ledActivity extends MainActivity {
     public static String MQTTHOST = "tcp://192.168.0.2:1883";
-    static String USERNAME = "root";
-    static String PASSWORD = "1234";
     MqttAndroidClient client;
     int flag1_img = 1;
     int flag2_img = 1;
@@ -29,8 +27,8 @@ public class ledActivity extends MainActivity {
     String flag2 = "off";
     ImageButton img_btn1;
     ImageButton img_btn2;
+    String msg2, status_msg1, status_msg2;
 
-    TextView led1_text, led2_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +37,6 @@ public class ledActivity extends MainActivity {
 
         img_btn1 = (ImageButton) findViewById(R.id.led_living_btn);
         img_btn2 = (ImageButton) findViewById(R.id.led_kit_btn);
-
-        led1_text = (TextView) findViewById(R.id.led1_view);
-        led2_text = (TextView) findViewById(R.id.led2_view);
 
         String clientId = MqttClient.generateClientId();
         client = new MqttAndroidClient(this.getApplicationContext(), MQTTHOST, clientId);
@@ -61,6 +56,8 @@ public class ledActivity extends MainActivity {
                     try {
                         client.subscribe("iot/led1", 0);
                         client.subscribe("iot/led2", 0);
+                        client.subscribe("iot/led1_status", 0);
+                        client.subscribe("iot/led2_status", 0);
                     } catch (MqttException e) {
                         e.printStackTrace();
                     }
@@ -83,37 +80,48 @@ public class ledActivity extends MainActivity {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                if(topic.equals("iot/led1")){
-                    String msg1 = "";
-                    msg1 = new String(message.getPayload());
-                    if (msg1=="ON") {
+                Log.d(this.getClass().getName(), "버튼 Message Arrive 들어옴");
+
+
+                if (topic.equals("iot/led1_status")) {
+                    status_msg1 = new String(message.getPayload());
+                    int status_int1 = Integer.parseInt(status_msg1);
+                    if (status_int1 == 1) {
                         img_btn1.setSelected(true);
-                        led1_text.setText("거실 상태 : " + msg1);
-                        msg1 = "";
-                    }
-                    else if(msg1=="OFF"){
+                    } else if (status_int1 == 0) {
                         img_btn1.setSelected(false);
-                        led1_text.setText("거실 상태 : " + msg1);
-                        msg1 = "";
                     }
                 }
 
-                if(topic.equals("iot/led2")){
-                    String msg2 = "";
-                    msg2 = new String(message.getPayload());
-                    if (msg2=="ON") {
-                        img_btn1.setSelected(true);
-                        led1_text.setText("거실 상태 : " + msg2);
-                        msg2 = "";
+                if (topic.equals("iot/led2_status")) {
+                    status_msg2 = new String(message.getPayload());
+                    int status_int2 = Integer.parseInt(status_msg2);
+                    if (status_int2 == 1) {
+                        img_btn2.setSelected(true);
+                    } else if (status_int2 == 0) {
+                        img_btn2.setSelected(false);
                     }
-                    else if(msg2=="OFF"){
+                }
+
+                if(topic.equals("iot/led1")){
+                    String msg1 = new String(message.getPayload());
+                    if (msg1.equals("ON")) {
+                        img_btn1.setSelected(true);
+                    }
+                    else if (msg1.equals("OFF")) {
                         img_btn1.setSelected(false);
-                        led1_text.setText("거실 상태 : " + msg2);
-                        msg2 = "";
+                    }
+                }
+                if(topic.equals("iot/led2")){
+                    msg2 = new String(message.getPayload());
+                    if (msg2.equals("ON")) {
+                        img_btn2.setSelected(true);
+                    }
+                    else if(msg2.equals("OFF")){
+                        img_btn2.setSelected(false);
                     }
                 }
             }
-
             @Override
 
             public void deliveryComplete(IMqttDeliveryToken token) {
@@ -133,12 +141,10 @@ public class ledActivity extends MainActivity {
             flag1 = "on";
             message = "ON";
             img_btn1.setSelected(true);
-//            btn_change.setSelected(true);
         } else if (flag1 == "on") {
             flag1 = "off";
             message = "OFF";
             img_btn1.setSelected(false);
-//            btn_change.setSelected(false);
         }
         try {
             client.publish(topic, message.getBytes(), 0, false);
@@ -161,6 +167,18 @@ public class ledActivity extends MainActivity {
             message = "OFF";
             img_btn2.setSelected(false);
         }
+        try {
+            client.publish(topic, message.getBytes(), 0, false);
+            client_server.publish(topic_server, message.getBytes(), 0, false);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pub_led_refresh(View v) {
+        String topic = "iot/led";
+        String topic_server = "app/led";
+        String message = "status";
         try {
             client.publish(topic, message.getBytes(), 0, false);
             client_server.publish(topic_server, message.getBytes(), 0, false);

@@ -44,8 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:text="거실"
-            app:srcCompat="@mipmap/ic_brightness_high_black_24dp" />
+            android:text="거실"/>
 
         <ImageButton
             android:id="@+id/led_living_btn"
@@ -94,5 +93,25 @@
         <!--android:layout_weight="1"-->
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/imageButton9"
+        android:layout_width="83dp"
+        android:layout_height="83dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:onClick="pub_led_refresh"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.759"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.136"
+        app:srcCompat="@drawable/refresh" />
 
 </android.support.constraint.ConstraintLayout>
