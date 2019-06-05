@@ -70,18 +70,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_camera) {
-//            Toast.makeText(this, "메뉴 클릭", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://192.168.0.12:625/videostream.cgi?user=admin&pwd=123456789"));
-            //웹페이지 들어가기
-            startActivity(intent);
-
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     public void ledActivity(View view) {
         Intent intent2 = new Intent(MainActivity.this, ledActivity.class);
@@ -99,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CameraActivity(View view) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://192.168.0.12:625/videostream.cgi?user=admin&pwd=123456789"));
-        startActivity(intent);
+        Intent intent5 = new Intent(MainActivity.this, CameraActivity.class);
+        startActivity(intent5);
     }
 
     public void onClick(View view) {
