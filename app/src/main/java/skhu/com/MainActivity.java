@@ -155,7 +155,8 @@ public class MainActivity extends AppCompatActivity {
         if ((switch1.isChecked()) == false) {
                 try {
                     client_iot.publish("iot/outside", "OFF".getBytes(), 0, false);
-                    client_server.publish("app/outside ", "OFF".getBytes(), 0, false);
+                    client_server.publish("app/outside", "OFF".getBytes(), 0, false);
+
 
                 } catch (MqttException e) {
                     e.printStackTrace();
