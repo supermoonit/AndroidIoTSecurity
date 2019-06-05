@@ -14,10 +14,15 @@ import android.widget.Toast;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+import static java.util.logging.Logger.global;
 
 public class MainActivity extends AppCompatActivity {
     public static String MQTTHOST_iot = "tcp://192.168.0.2:1883";
@@ -30,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     MqttAndroidClient client_server;
 
     Switch switch1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +58,16 @@ public class MainActivity extends AppCompatActivity {
             token_iot.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                }
+                    try {
+                        client_iot.publish("iot/outside", "status".getBytes(), 0, false);
+                        client_server.publish("app/outside", "status".getBytes(), 0, false);
 
+                        client_iot.subscribe("iot/outside_status", 0);
+
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
+                }
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                 }
@@ -62,12 +76,34 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-    }
+        client_iot.setCallback(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable cause) {
+            }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                String Message;
+
+                if(topic.equals("iot/outside_status")){
+                    Message = new String(message.getPayload());
+
+
+                    if (Message.equals("True")) {
+                        switch1.setChecked(true);
+
+                    }
+
+                    if (Message.equals("False")) {
+                        switch1.setChecked(false);
+                    }
+                }
+            }
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
+        });
     }
 
 
@@ -106,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
                         client_iot.publish("iot/outside", "ON".getBytes(), 0, false);
                         client_server.publish("app/outside", "ON".getBytes(), 0, false);
 
+
                     } catch (MqttException e) {
                         e.printStackTrace();
                     }
@@ -113,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
             });
             snackbar.show();
         }
+
 
         if ((switch1.isChecked()) == false) {
                 try {
